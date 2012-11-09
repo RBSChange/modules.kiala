@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<module>
+		<enabled>true</enabled>
+		<visible>false</visible>
+		<icon>shipping</icon>
+	</module>
+	<project>
+		<entry name="frameBaseUrl">http://locateandselect.kiala.com/search</entry>
+		<entry name="webserviceUrl">http://locateandselect.kiala.com/kplist</entry>
+		<entry name="trackingUrl">http://trackandtrace.kiala.com/search</entry>
+		<entry name="disableThumbnails">false</entry> <!-- Can be true -->
+		<entry name="disableMap">false</entry> <!-- Can be true -->
+		<entry name="mapWidth">500</entry> <!-- Can be a numeric value -->
+		<entry name="mapHeight">400</entry> <!-- Can be a numeric value -->
+		<entry name="alignMap">right</entry> <!-- Can be left -->
+		<entry name="disableHeader">false</entry> <!-- Can be true -->
+	</project>
+</config>
