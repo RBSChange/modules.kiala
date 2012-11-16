@@ -6,9 +6,11 @@
 		<icon>shipping</icon>
 	</module>
 	<project>
-		<entry name="frameBaseUrl">http://locateandselect.kiala.com/search</entry>
 		<entry name="webserviceUrl">http://locateandselect.kiala.com/kplist</entry>
 		<entry name="trackingUrl">http://trackandtrace.kiala.com/search</entry>
+		<!-- Use this parameters to configure the iFrame -->
+		<entry name="useFrame">false</entry> <!-- Can be true -->
+		<entry name="frameBaseUrl">http://locateandselect.kiala.com/search</entry>
 		<entry name="disableThumbnails">false</entry> <!-- Can be true -->
 		<entry name="disableMap">false</entry> <!-- Can be true -->
 		<entry name="mapWidth">500</entry> <!-- Can be a numeric value -->

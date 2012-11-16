@@ -126,5 +126,150 @@ class kiala_KialamodeService extends shipping_RelayModeService
 		
 		return $frameUrl;
 	}
+	
+	/**
+	 *
+	 * @param DOMNode $item
+	 * @return shipping_Relay
+	 */
+	public function getRelayFromXml($item)
+	{
+		
+		$relay = new shipping_Relay();
+		
+		$attributes = $item->attributes;
+		$relay->setRef($attributes->getNamedItem('shortId')->nodeValue);
+		
+		$childList = $item->childNodes;
+		
+		for ($i = 0; $i < $childList->length; $i++)
+		{
+			
+			$child = $childList->item($i);
+			$nodeName = strtolower($child->nodeName);
+			switch ($nodeName)
+			{
+				case 'name' :
+					$relay->setName($child->nodeValue);
+					break;
+				case 'address' :
+					$addressChildList = $child->childNodes;
+					for ($j = 0; $j < $addressChildList->length; $j++)
+					{
+						$addressChild = $addressChildList->item($j);
+						$addressChildNodeName = strtolower($addressChild->nodeName);
+						switch ($addressChildNodeName)
+						{
+							case 'street' :
+								$relay->setAddressLine1($addressChild->nodeValue);
+								break;
+							case 'zip' :
+								$relay->setZipCode($addressChild->nodeValue);
+								break;
+							case 'city' :
+								$relay->setCity($addressChild->nodeValue);
+								break;
+							case 'locationHint' :
+								$value = trim($addressChild->nodeValue);
+								if ($value != '')
+								{
+									$relay->setLocationHint($value);
+								}
+								break;
+						}
+					}
+					
+					break;
+				
+				case 'openinghours' :
+					
+					$hoursNodeList = $child->childNodes;
+					$openingHours = array();
+					
+					// Monday
+					$openingHours[] = $this->extractOpeningHour($hoursNodeList->item(0));
+					
+					// Tuesday
+					$openingHours[] = $this->extractOpeningHour($hoursNodeList->item(1));
+					
+					// Wednesday
+					$openingHours[] = $this->extractOpeningHour($hoursNodeList->item(2));
+					
+					// Thursday
+					$openingHours[] = $this->extractOpeningHour($hoursNodeList->item(3));
+					
+					// Friday
+					$openingHours[] = $this->extractOpeningHour($hoursNodeList->item(4));
+					
+					// Saturday
+					$openingHours[] = $this->extractOpeningHour($hoursNodeList->item(5));
+					
+					// Sunday
+					$openingHours[] = $this->extractOpeningHour($hoursNodeList->item(6));
+					
+					$relay->setOpeningHours($openingHours);
+					break;
+				
+				case 'picture' :
+					$attributes = $child->attributes;
+					$hrefAttributes = $attributes->getNamedItem('href');
+					if ($hrefAttributes != null)
+					{
+						$relay->setPictureUrl($hrefAttributes->nodeValue);
+					}
+					
+					break;
+				
+				case 'coordinate' :
+					$relay->setLatitude($child->firstChild->nodeValue);
+					$relay->setLongitude($child->lastChild->nodeValue);
+					break;
+			
+			}
+		
+		}
+		
+		return $relay;
+	
+	}
+	
+	/**
+		 * Extract opening hours from raw hours data
+		 * @param DOMNode hoursNodes
+		 * @return string
+		 */
+	protected function extractOpeningHour($hoursNode)
+	{
+		$ls = LocaleService::getInstance();
+		$result = '';
+		if (!$hoursNode->hasChildNodes())
+		{
+			$result = $ls->transFO('m.shipping.general.closed');
+		}
+		else
+		{
+			$timeSpanList = $hoursNode->childNodes;
+			$morningTimeSpan = $timeSpanList->item(0);
+			$morningTimeSpanStart = $morningTimeSpan->firstChild;
+			$morningTimeSpanEnd = $morningTimeSpan->lastChild;
+			$result = $ls->transFO('m.shipping.general.opening-hours', array('ucf'), array('hour1' => $morningTimeSpanStart->nodeValue, 
+				'hour2' => $morningTimeSpanEnd->nodeValue));
+			
+			$afternoonTimeSpan = $timeSpanList->item(1);
+			if ($afternoonTimeSpan != null)
+			{
+				$afternoonTimeSpanStart = $afternoonTimeSpan->firstChild;
+				$afternoonTimeSpanEnd = $afternoonTimeSpan->lastChild;
+				$result .= ' ';
+				$result .= $ls->transFO('m.shipping.general.and');
+				$result .= ' ';
+				$result .= $ls->transFO('m.shipping.general.opening-hours', array(), array('hour1' => $afternoonTimeSpanStart->nodeValue, 
+					'hour2' => $afternoonTimeSpanEnd->nodeValue));
+			}
+		
+		}
+		
+		return $result;
+	}
 
 }
