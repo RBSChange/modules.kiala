@@ -5,7 +5,9 @@
  */
 class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAction
 {
-	
+	/**
+	 * Initialize $this->param
+	 */
 	protected function init()
 	{
 		$shippingAdress = $this->expedition->getAddress();
@@ -19,9 +21,11 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 		
 		$this->param['webserviceUrl'] = Framework::getConfigurationValue('modules/kiala/webserviceUrl');
 		$this->param['trackingUrl'] = Framework::getConfigurationValue('modules/kiala/trackingUrl');
-	
 	}
 	
+	/**
+	 * @return shipping_Relay
+	 */
 	protected function getRelayDetail()
 	{
 		$relay = null;
@@ -44,6 +48,10 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 		return $relay;
 	}
 	
+	/**
+	 * @param string $trackingNumber
+	 * @return array
+	 */
 	protected function getTrackingDetail($trackingNumber)
 	{
 		$ls = LocaleService::getInstance();
@@ -63,7 +71,6 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 		
 		foreach ($eventList as $event)
 		{
-			
 			$step = array();
 			
 			foreach ($event->getElementsByTagName('*') as $item)
@@ -87,7 +94,6 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 						$step['label'] = $item->nodeValue;
 						break;
 				}
-			
 			}
 			
 			$result['steps'][$step['date'] . count($result['steps'])] = $step;
@@ -96,5 +102,4 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 		
 		return $result;
 	}
-
 }

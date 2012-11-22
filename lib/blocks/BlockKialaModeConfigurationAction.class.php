@@ -5,7 +5,9 @@
  */
 class kiala_BlockKialaModeConfigurationAction extends shipping_BlockRelayModeConfigurationAction
 {
-	
+	/**
+	 * @return string|NULL
+	 */
 	protected function buildFrameUrl()
 	{
 		$useFrame = Framework::getConfigurationValue('modules/kiala/useFrame');
@@ -46,5 +48,4 @@ class kiala_BlockKialaModeConfigurationAction extends shipping_BlockRelayModeCon
 		
 		return $relays;
 	}
-
 }

@@ -5,6 +5,9 @@
  */
 class kiala_GetFrameStylesheetAction extends shipping_GetFrameStylesheetAction
 {
+	/**
+	 * @return string
+	 */
 	protected function getStylesheetName()
 	{
 		return 'modules.kiala.frame';

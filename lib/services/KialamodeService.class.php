@@ -61,14 +61,12 @@ class kiala_KialamodeService extends shipping_RelayModeService
 	{
 		return array('kiala', 'KialaModeConfiguration');
 	}
-	
 	protected function getDetailExpeditionPageTagName()
 	{
 		return 'contextual_website_website_modules_kiala_kialaexpedition';
 	}
 	
 	/**
-	 *
 	 * @param kiala_persistentdocument_kialamode $mode
 	 * @param customer_persistentdocument_address $shippingAddress
 	 * @param array $extraUrlParams
@@ -128,13 +126,11 @@ class kiala_KialamodeService extends shipping_RelayModeService
 	}
 	
 	/**
-	 *
 	 * @param DOMNode $item
 	 * @return shipping_Relay
 	 */
 	public function getRelayFromXml($item)
 	{
-		
 		$relay = new shipping_Relay();
 		
 		$attributes = $item->attributes;
@@ -144,7 +140,6 @@ class kiala_KialamodeService extends shipping_RelayModeService
 		
 		for ($i = 0; $i < $childList->length; $i++)
 		{
-			
 			$child = $childList->item($i);
 			$nodeName = strtolower($child->nodeName);
 			switch ($nodeName)
@@ -224,20 +219,16 @@ class kiala_KialamodeService extends shipping_RelayModeService
 					$relay->setLatitude($child->firstChild->nodeValue);
 					$relay->setLongitude($child->lastChild->nodeValue);
 					break;
-			
 			}
-		
 		}
-		
 		return $relay;
-	
 	}
 	
 	/**
-		 * Extract opening hours from raw hours data
-		 * @param DOMNode hoursNodes
-		 * @return string
-		 */
+	 * Extract opening hours from raw hours data
+	 * @param DOMNode hoursNodes
+	 * @return string
+	 */
 	protected function extractOpeningHour($hoursNode)
 	{
 		$ls = LocaleService::getInstance();
@@ -252,8 +243,8 @@ class kiala_KialamodeService extends shipping_RelayModeService
 			$morningTimeSpan = $timeSpanList->item(0);
 			$morningTimeSpanStart = $morningTimeSpan->firstChild;
 			$morningTimeSpanEnd = $morningTimeSpan->lastChild;
-			$result = $ls->transFO('m.shipping.general.opening-hours', array('ucf'), array('hour1' => $morningTimeSpanStart->nodeValue, 
-				'hour2' => $morningTimeSpanEnd->nodeValue));
+			$result = $ls->transFO('m.shipping.general.opening-hours', array('ucf'), array(
+				'hour1' => $morningTimeSpanStart->nodeValue, 'hour2' => $morningTimeSpanEnd->nodeValue));
 			
 			$afternoonTimeSpan = $timeSpanList->item(1);
 			if ($afternoonTimeSpan != null)
@@ -263,13 +254,10 @@ class kiala_KialamodeService extends shipping_RelayModeService
 				$result .= ' ';
 				$result .= $ls->transFO('m.shipping.general.and');
 				$result .= ' ';
-				$result .= $ls->transFO('m.shipping.general.opening-hours', array(), array('hour1' => $afternoonTimeSpanStart->nodeValue, 
-					'hour2' => $afternoonTimeSpanEnd->nodeValue));
+				$result .= $ls->transFO('m.shipping.general.opening-hours', array(), array(
+					'hour1' => $afternoonTimeSpanStart->nodeValue, 'hour2' => $afternoonTimeSpanEnd->nodeValue));
 			}
-		
 		}
-		
 		return $result;
 	}
-
 }
