@@ -14,6 +14,7 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 		$this->param['relayCode'] = $shippingAdress->getLabel();
 		$this->param['countryCode'] = $shippingAdress->getCountryCode();
 		$this->param['dspId'] = $shippingMode->getDspid();
+		$this->param['groupName'] = $shippingMode->getGroupName();
 		$this->param['lang'] = strtoupper($this->getContext()->getLang());
 		
 		$this->param['webserviceUrl'] = Framework::getConfigurationValue('modules/kiala/webserviceUrl');
@@ -45,9 +46,53 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 	
 	protected function getTrackingDetail($trackingNumber)
 	{
-		$url = $this->param['trackingUrl'] . '?dspid=' . $this->param['dspId'] . '&countryid=' . $this->param['countryCode'] . '&language=' . $this->param['lang'] . '&dspparcelid=' . $trackingNumber;
+		$ls = LocaleService::getInstance();
 		
-		$result['trackingUrl'] = $url;
+		$result = array();
+		
+		$url = $this->param['trackingUrl'] . '?group-name=' . $this->param['groupName'] . '&country=' . $this->param['countryCode'] . '&language=' . $this->param['lang'] . '&criteria-type=dspparcelid&criteria-value=' . $trackingNumber;
+		
+		$httpClient = HTTPClientService::getInstance()->getNewHTTPClient();
+		$xml = $httpClient->get($url);
+		
+		$doc = f_util_DOMUtils::fromString($xml);
+		
+		$eventList = $doc->find('//parcelEvent');
+		
+		$result['steps'] = array();
+		
+		foreach ($eventList as $event)
+		{
+			
+			$step = array();
+			
+			foreach ($event->getElementsByTagName('*') as $item)
+			{
+				/* @var $item DOMNode */
+				
+				switch ($item->localName)
+				{
+					case 'place' :
+						$place = $item->attributes->getNamedItem('type')->nodeValue;
+						$step['place'] = $ls->transFO('m.kiala.general.' . $place, array('ucf'));
+						break;
+					
+					case 'eventDateTime' :
+						$dateEvent = strtotime($item->nodeValue);
+						$step['date'] = date_Formatter::format($dateEvent, 'd/m/Y');
+						$step['hour'] = date_Formatter::format($dateEvent, 'H:i');
+						break;
+					
+					case 'description' :
+						$step['label'] = $item->nodeValue;
+						break;
+				}
+			
+			}
+			
+			$result['steps'][$step['date'] . count($result['steps'])] = $step;
+		}
+		ksort($result['steps']);
 		
 		return $result;
 	}

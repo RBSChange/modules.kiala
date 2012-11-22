@@ -6,8 +6,8 @@
 		<icon>shipping</icon>
 	</module>
 	<project>
-		<entry name="webserviceUrl">http://locateandselect.kiala.com/kplist</entry>
-		<entry name="trackingUrl">http://trackandtrace.kiala.com/search</entry>
+		<entry name="webserviceUrl">https://locateandselect.kiala.com/kplist</entry>
+		<entry name="trackingUrl">https://trackandtrace-ws.kiala.com/tracker/rest/ParcelData</entry>
 		<!-- Use this parameters to configure the iFrame -->
 		<entry name="useFrame">false</entry> <!-- Can be true -->
 		<entry name="frameBaseUrl">http://locateandselect.kiala.com/search</entry>

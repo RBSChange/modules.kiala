@@ -2,4 +2,5 @@
 <i18n baseKey="m.kiala.document.kialamode" lcid="fr_FR">
   <include id="m.shipping.document.mode"/>
   <key id="dspid">numéro de compte Kiala</key>
+  <key id="groupname">nom du groupe</key>
 </i18n>

@@ -4,6 +4,7 @@
 		<field name="label" />
 		<field name="code" />
 		<field name="dspid" />
+		<field name="groupName" />
 		<field name="description" />
 		<field name="visual" hidehelp="true" allowfile="true" mediafoldername="Inbox" />
 		<field name="addressRequired" />
