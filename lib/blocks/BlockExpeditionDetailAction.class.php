@@ -35,14 +35,21 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 		$httpClient = HTTPClientService::getInstance()->getNewHTTPClient();
 		$xml = $httpClient->get($url);
 		
-		$doc = f_util_DOMUtils::fromString($xml);
-		
-		$kpNode = $doc->documentElement->firstChild;
-		
-		if ($kpNode != null && $kpNode->nodeName == 'kp')
+		try
 		{
-			$relay = kiala_KialamodeService::getInstance()->getRelayFromXml($kpNode);
-			$relay->setCountryCode($this->param['countryCode']);
+			$doc = f_util_DOMUtils::fromString($xml);
+			
+			$kpNode = $doc->documentElement->firstChild;
+			
+			if ($kpNode != null && $kpNode->nodeName == 'kp')
+			{
+				$relay = kiala_KialamodeService::getInstance()->getRelayFromXml($kpNode);
+				$relay->setCountryCode($this->param['countryCode']);
+			}
+		}
+		catch (Exception $e)
+		{
+			Framework::exception($e);
 		}
 		
 		return $relay;
@@ -54,51 +61,61 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 	 */
 	protected function getTrackingDetail($trackingNumber)
 	{
-		$ls = LocaleService::getInstance();
-		
 		$result = array();
 		
-		$url = $this->param['trackingUrl'] . '?group-name=' . $this->param['groupName'] . '&country=' . $this->param['countryCode'] . '&language=' . $this->param['lang'] . '&criteria-type=dspparcelid&criteria-value=' . $trackingNumber;
-		
-		$httpClient = HTTPClientService::getInstance()->getNewHTTPClient();
-		$xml = $httpClient->get($url);
-		
-		$doc = f_util_DOMUtils::fromString($xml);
-		
-		$eventList = $doc->find('//parcelEvent');
-		
-		$result['steps'] = array();
-		
-		foreach ($eventList as $event)
+		if ($trackingNumber != null && $trackingNumber != '')
 		{
-			$step = array();
+			$ls = LocaleService::getInstance();
 			
-			foreach ($event->getElementsByTagName('*') as $item)
+			$url = $this->param['trackingUrl'] . '?group-name=' . $this->param['groupName'] . '&country=' . $this->param['countryCode'] . '&language=' . $this->param['lang'] . '&criteria-type=dspparcelid&criteria-value=' . $trackingNumber;
+			
+			$httpClient = HTTPClientService::getInstance()->getNewHTTPClient();
+			$xml = $httpClient->get($url);
+			
+			try
 			{
-				/* @var $item DOMNode */
+				$doc = f_util_DOMUtils::fromString($xml);
 				
-				switch ($item->localName)
+				$eventList = $doc->find('//parcelEvent');
+				
+				$result['steps'] = array();
+				
+				foreach ($eventList as $event)
 				{
-					case 'place' :
-						$place = $item->attributes->getNamedItem('type')->nodeValue;
-						$step['place'] = $ls->transFO('m.kiala.general.' . $place, array('ucf'));
-						break;
+					$step = array();
 					
-					case 'eventDateTime' :
-						$dateEvent = strtotime($item->nodeValue);
-						$step['date'] = date_Formatter::format($dateEvent, 'd/m/Y');
-						$step['hour'] = date_Formatter::format($dateEvent, 'H:i');
-						break;
+					foreach ($event->getElementsByTagName('*') as $item)
+					{
+						/* @var $item DOMNode */
+						
+						switch ($item->localName)
+						{
+							case 'place' :
+								$place = $item->attributes->getNamedItem('type')->nodeValue;
+								$step['place'] = $ls->transFO('m.kiala.general.' . $place, array('ucf'));
+								break;
+							
+							case 'eventDateTime' :
+								$dateEvent = strtotime($item->nodeValue);
+								$step['date'] = date_Formatter::format($dateEvent, 'd/m/Y');
+								$step['hour'] = date_Formatter::format($dateEvent, 'H:i');
+								break;
+							
+							case 'description' :
+								$step['label'] = $item->nodeValue;
+								break;
+						}
+					}
 					
-					case 'description' :
-						$step['label'] = $item->nodeValue;
-						break;
+					$result['steps'][$step['date'] . count($result['steps'])] = $step;
 				}
+				ksort($result['steps']);
 			}
-			
-			$result['steps'][$step['date'] . count($result['steps'])] = $step;
+			catch (Exception $e)
+			{
+				Framework::exception($e);
+			}
 		}
-		ksort($result['steps']);
 		
 		return $result;
 	}

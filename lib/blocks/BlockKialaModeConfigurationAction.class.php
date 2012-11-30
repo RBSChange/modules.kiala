@@ -34,16 +34,23 @@ class kiala_BlockKialaModeConfigurationAction extends shipping_BlockRelayModeCon
 		$httpClient = HTTPClientService::getInstance()->getNewHTTPClient();
 		$xml = $httpClient->get($url);
 		
-		$doc = f_util_DOMUtils::fromString($xml);
-		
-		$kplist = $doc->documentElement;
-		$kpNodes = $kplist->childNodes;
-		
-		for ($i = 0; $i < $kpNodes->length; $i++)
+		try
 		{
-			$relay = kiala_KialamodeService::getInstance()->getRelayFromXml($kpNodes->item($i));
-			$relay->setCountryCode($this->param['countryCode']);
-			$relays[] = $relay;
+			$doc = f_util_DOMUtils::fromString($xml);
+			
+			$kplist = $doc->documentElement;
+			$kpNodes = $kplist->childNodes;
+			
+			for ($i = 0; $i < $kpNodes->length; $i++)
+			{
+				$relay = kiala_KialamodeService::getInstance()->getRelayFromXml($kpNodes->item($i));
+				$relay->setCountryCode($this->param['countryCode']);
+				$relays[] = $relay;
+			}
+		}
+		catch (Exception $e)
+		{
+			Framework::exception($e);
 		}
 		
 		return $relays;
