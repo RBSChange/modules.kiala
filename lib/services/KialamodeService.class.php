@@ -164,7 +164,7 @@ class kiala_KialamodeService extends shipping_RelayModeService
 							case 'city' :
 								$relay->setCity($addressChild->nodeValue);
 								break;
-							case 'locationHint' :
+							case 'locationhint' :
 								$value = trim($addressChild->nodeValue);
 								if ($value != '')
 								{
