@@ -61,6 +61,10 @@ class kiala_KialamodeService extends shipping_RelayModeService
 	{
 		return array('kiala', 'KialaModeConfiguration');
 	}
+	
+	/**
+	 * @return string
+	 */
 	protected function getDetailExpeditionPageTagName()
 	{
 		return 'contextual_website_website_modules_kiala_kialaexpedition';

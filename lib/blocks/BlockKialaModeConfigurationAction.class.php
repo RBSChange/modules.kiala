@@ -20,7 +20,7 @@ class kiala_BlockKialaModeConfigurationAction extends shipping_BlockRelayModeCon
 	
 	/**
 	 * Return the list of shipping_Relay
-	 * @return array<shipping_Relay>
+	 * @return shipping_Relay[]
 	 */
 	protected function buildRelayList()
 	{
@@ -45,6 +45,7 @@ class kiala_BlockKialaModeConfigurationAction extends shipping_BlockRelayModeCon
 			{
 				$relay = kiala_KialamodeService::getInstance()->getRelayFromXml($kpNodes->item($i));
 				$relay->setCountryCode($this->param['countryCode']);
+				$relay->setIconUrl('/media/frontoffice/marker-kiala.png');
 				$relays[] = $relay;
 			}
 		}
