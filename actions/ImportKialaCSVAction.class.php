@@ -36,8 +36,6 @@ class kiala_ImportKialaCSVAction extends f_action_BaseJSONAction
 			fclose($h);
 		}
 		$this->importKialaCsvForOrder($lines, $order);
-		Framework::fatal("########## FILEDS TO IMPORT :\n".var_export($lines, true));
-		Framework::fatal("########## DOCUMENT :\n".var_export($order, true));
 
 		return $this->sendJSON(array('message' => $lsi->transBO('m.kiala.bo.exceptions.import-success')));
 	}
