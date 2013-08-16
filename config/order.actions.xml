@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action name="exportKialaCSV">
+        <parameter name="panel" />
+        <body><![CDATA[
+         	url = wCore.buildServerUrl('kiala', 'ExportOrderToCSV', { cmpref: panel.documentEditor.documentid});
+        	window.open(url, '_kialaExport');
+		]]></body>
+    </action>
+
+    <action name="createDspidFromKialaMode">
+        <parameter name="params" />
+        <body><![CDATA[
+			var kialaModeId = params[3];
+			var toCountry = params[4];
+
+			var editor = this.getDocumentEditor('modules_kiala_kialadspid');
+			editor.setAttribute('toCountry', toCountry);
+			this.createDocumentEditor('modules_kiala_kialadspid', kialaModeId);
+		]]></body>
+    </action>
+
+
+	<action name="addKialaButtons">
+		<parameter name="panel"/>
+		<body>
+			<![CDATA[
+				panel.mButtons.KialaExportButton = panel.addActionButton("${transui:m.kiala.bo.actions.export-kiala-csv,ucf,js}", wToolkit.getIcon('kialaExport', 'small'));
+				panel.mButtons.KialaExportButton.setAttribute('hidden', 'true');
+               	panel.mButtons.KialaExportButton.addEventListener('command', function(event) {panel.documentEditor.module.exportKialaCSV(panel);}, true);
+                panel.mButtons.KialaExportButton.disabled = true;
+
+				panel.mButtons.KialaImportButton = panel.addActionButton("${transui:m.kiala.bo.actions.import-kiala-csv,ucf,js}", wToolkit.getIcon('kialaExport', 'small'));
+				panel.mButtons.KialaImportButton.setAttribute('hidden', 'true');
+               	panel.mButtons.KialaImportButton.addEventListener('command', function(event) {panel.documentEditor.module.importKialaCSV(panel);}, true);
+                panel.mButtons.KialaImportButton.disabled = true;
+			]]>
+		</body>
+	</action>
+
+
+	<action name="showKialaButtons">
+		<parameter name="panel"/>
+		<body>
+			<![CDATA[
+				panel.mButtons.KialaExportButton.setAttribute('hidden', 'false');
+                panel.mButtons.KialaExportButton.disabled = false;
+
+				panel.mButtons.KialaImportButton.setAttribute('hidden', 'false');
+                panel.mButtons.KialaImportButton.disabled = false;
+			]]>
+		</body>
+	</action>
+
+	<action name="importKialaCSV">
+		<parameter name="panel"/>
+		<body><![CDATA[
+    	var module = this;
+		try
+		{
+			this.getController().openModalDialog(this, 'ImportKialaCSV', {cmpref: panel.documentEditor.documentid, module: module});
+		}
+		catch (e)
+		{
+			wCore.error('import', [], e);
+		}
+    ]]></body>
+	</action>
+</actions>

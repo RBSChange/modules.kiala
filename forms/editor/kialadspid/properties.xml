@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel>
+  <section labeli18n="m.uixul.bo.doceditor.fieldsgroup.title">
+    <field name="toCountry"
+           type="dropdownlist"
+           listid="modules_kiala/operatedcountries" />
+    <field name="dspidCode"/>
+  </section>
+</panel>

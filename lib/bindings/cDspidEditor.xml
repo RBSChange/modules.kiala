@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl" xmlns:xbl="http://www.mozilla.org/xbl" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<binding id="cDspidsPanel" extends="layout.cDocumentEditor#cDocumentEditorPanelFields">
+		<content>
+			<xul:vbox flex="1">
+				<xul:cmessageinfo anonid="message" />
+				<xul:hbox anonid="action-bar">
+                    <xul:button anonid="button-new" oncommand="createNew()" label="${transui:m.kiala.bo.doceditor.panel.kialadspid.new,ucf,attr}" image="{IconsBase}/small/add.png"/>
+                    <xul:button anonid="button-kialaHelp" oncommand="openKialaHelp()" label="${transui:m.kiala.bo.doceditor.panel.kialadspid.go-to-help,ucf,attr}" image="{IconsBase}/small/kiala.png"/>
+                </xul:hbox>
+				<xul:scrollbox anonid="scrollctrl" flex="1" class="editordatacontainer" orient="vertical">
+					<xul:vbox flex="1" anonid="dspid-list-box">
+                        <xul:hbox>
+							<xul:spacer flex="1" />
+							<xul:label anonid="result-count" />
+						</xul:hbox>
+						<xul:cfield name="kialadspids" anonid="field_kialadspids" fieldtype="namedgridlist" flex="1" />
+					</xul:vbox>
+				</xul:scrollbox>
+			</xul:vbox>
+		</content>
+		<implementation>
+            <field name="mFieldNames">['kialadspids']</field>
+
+			<constructor><![CDATA[
+				// Datepicker requires an id.
+				var rand = Math.round(Math.random() * 100000); 
+				//this.getElementByAnonId('field_date').setAttribute('id', 'cPricesPanel_field_date_'+rand);
+			]]></constructor>
+			
+			<property name="modified">
+				<getter><![CDATA[return false;]]></getter>
+				<setter><![CDATA[;]]></setter>
+			</property>
+			
+			<method name="createNew">
+				<body><![CDATA[
+					//wCore.debug('cPricesList.createNew');
+					var kialaModeId = this.documentEditor.documentid;
+					//var toCountry = this.fields.toCountry.value;
+                    //var uri = ['shipping', 'createDspidFromKialaMode', 'modules_kiala_kialadspid', kialaModeId, toCountry].join(',');
+                    var uri = ['shipping', 'createDspidFromKialaMode', 'modules_kiala_kialadspid', kialaModeId].join(',');
+                        wCore.debug('createNew: ' + uri);
+					openActionUri(uri);
+				]]></body>
+			</method>
+
+            <method name="openKialaHelp">
+                <body><![CDATA[
+                        var url = wCore.buildServerUrl('kiala', 'OpenKialaHelp');
+                        window.open(url, 'kialaHelp');
+                    ]]></body>
+            </method>
+			
+			<method name="refresh">
+			<body><![CDATA[
+				//wCore.debug('refresh');
+				this.mInitialized = false;
+				this.documentEditor.executeServerAction('dspid', 'Initialize');
+				]]></body>
+			</method>
+			
+			<method name="getInitializeParameters">
+				<body><![CDATA[
+					var parameters = {
+                        module: 'kiala',
+                        action: 'InitializeDspidsPanel',
+						cmpref: this.documentEditor.documentid,
+						lang : this.documentEditor.documentInfos.vo
+					};
+					return parameters;
+				]]></body>
+			</method>
+			
+			<method name="fireInitializeComplete">
+				<parameter name="result" />
+				<body><![CDATA[
+					if (result.status != 'OK')
+					{
+						this.showErrorMessage(result.contents.errorMessage);
+						//this.getElementByAnonId('dspid-filters-box').setAttribute('hidden', 'true');
+						this.getElementByAnonId('dspid-list-box').setAttribute('hidden', 'true');
+					}
+					else
+					{
+						//this.getElementByAnonId('dspid-filters-box').setAttribute('hidden', 'false');
+						this.getElementByAnonId('dspid-list-box').setAttribute('hidden', 'false');
+						this.getElementByAnonId('button-new').setAttribute('hidden', 'false');
+
+                        var countries = result.contents.countries;
+                        var toCountryNode = this.fields.toCountry;
+
+                        this.setInitialValues(this.fields, result.contents);
+					}
+					this.mInitialized = true;
+                    this.fireEvent("panelInitializeComplete");
+					this.gotoTop();
+				]]></body>
+			</method>
+		</implementation>
+		<handlers>
+
+			<handler event="gridUIUpdated"><![CDATA[
+				var node = this.getElementByAnonId('result-count');
+				var resultsCount = event.originalTarget.getRowCount();
+				if (resultsCount == 0)
+				{
+					node.setAttribute('value', "${transui:m.uixul.bo.general.search.NoResults,ucf,js}");
+				}
+				else
+				{
+					node.setAttribute('value', "${transui:m.uixul.bo.general.search.SearchResultCount,lab,ucf,js}" + " " + resultsCount);
+				}
+				event.stopPropagation();
+			]]></handler>
+		</handlers>
+	</binding>
+
+	<binding id="cKialadspidsList" extends="widgets.cGrid#cAbstractSortableGrid">
+		<implementation>
+			<constructor><![CDATA[
+                    this.fireEvent('gridInitialised');
+			]]></constructor>
+
+			<method name="getDspidsPanel">
+				<body><![CDATA[
+					var pn = this.parentNode;
+					while (pn && pn.localName != 'cdspidpanel') { pn = pn.parentNode; }
+					return pn;
+				]]></body>
+			</method>
+
+			<method name="execute_edit">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />	
+				<body><![CDATA[
+					var uri = ['shipping', 'openDocument', 'modules_kiala_kialadspid', rowData.id, 'properties'].join(',');
+					openActionUri(uri);
+				]]></body>
+			</method>
+			
+			<method name="execute_delete">
+				<parameter name="rowNode" />
+				<parameter name="rowData" />
+				<body><![CDATA[
+                    if (confirm("${transui:m.kiala.bo.doceditor.panel.kialadspid.confirm-delete-dspid,ucf,js}"))
+                    {
+						var me = this;
+						var callBack = function(result) { me.getDspidsPanel().refresh(); };
+						wCore.executeJSON('kiala', 'DeleteJSON', {cmpref: rowData.id, lang: Context.W_LANG}, callBack, true);
+					}
+				]]></body>
+			</method>
+
+            <method name="execute_deactivated">
+                <parameter name="rowNode" />
+                <parameter name="rowData" />
+                <body><![CDATA[
+                        var me = this;
+                        var callBack = function(result) { me.getDspidsPanel().refresh(); };
+                        wCore.executeJSON('shipping', 'DeactivatedJSON', {cmpref: rowData.id}, callBack, true);
+                    ]]></body>
+            </method>
+
+            <method name="execute_reactivate">
+                <parameter name="rowNode" />
+                <parameter name="rowData" />
+                <body><![CDATA[
+                        var me = this;
+                        var callBack = function(result) { me.getDspidsPanel().refresh(); };
+                        wCore.executeJSON('shipping', 'ReActivateJSON', {cmpref: rowData.id}, callBack, true);
+                    ]]></body>
+            </method>
+		</implementation>
+		<content>
+			<xul:grid flex="1" anonid="grid" xbl:inherits="disabled">
+				<xul:columns>
+					<xul:column />
+                    <xul:column flex="1" />
+                    <xul:column flex="1" />
+				</xul:columns>
+				<xul:rows anonid="document-rows">
+					<xul:row class="head" anonid="head-row">
+						<xul:label name="status" value="" />
+						<xul:label name="toCountryName"
+							value="${transui:m.kiala.bo.doceditor.panel.kialadspid.column-toCountry,ucf,attr}" />
+						<xul:label name="dspidCode"
+							value="${transui:m.kiala.bo.doceditor.panel.kialadspid.column-dspidCode,ucf,attr}" />
+                        <xul:label name="actionrow"
+                                   value="${transui:m.kiala.bo.doceditor.panel.kialadspid.column-actions,ucf,attr}" />
+					</xul:row>
+				</xul:rows>
+			</xul:grid>		
+			<xul:row anonid="template-row" class="document" hidden="true" align="center">
+				<xul:cpublicationcell />
+				<xul:label value="" />
+				<xul:label value="" />
+                <xul:toolbar class="action" align="right">
+                    <xul:toolbarbutton action="edit" image="{IconsBase}/small/edit.png"
+                        tooltiptext="${transui:m.uixul.bo.actions.edit,ucf,attr}" />
+                    <xul:toolbarbutton action="delete" image="{IconsBase}/small/delete.png"
+                        tooltiptext="${transui:m.uixul.bo.actions.delete,ucf,attr}" />
+                    <xul:toolbarbutton action="deactivated" image="{IconsBase}/small/deactivated.png"
+                        tooltiptext="${transui:m.uixul.bo.actions.deactivate,ucf,attr}" />
+                    <xul:toolbarbutton action="reactivate" image="{IconsBase}/small/reactivate.png"
+                        tooltiptext="${transui:m.uixul.bo.actions.reactivate,ucf,attr}" />
+                </xul:toolbar>
+			</xul:row>				
+		</content>
+	</binding>
+
+</bindings>

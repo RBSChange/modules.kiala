@@ -1,0 +1,6 @@
+Version: 3.6.8
+
+Add properties to kialamode :
+- fromCountry
+- isWeightRequired
+- packnshiptype

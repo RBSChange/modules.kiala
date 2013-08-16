@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.kiala.bo.doceditor.kialadspid.panel" lcid="fr_FR">
+    <key id="new">créer un code DSPID</key>
+    <key id="fromCountry-filter">pays d'expédition</key>
+    <key id="toCountry-filter">pays de livraison</key>
+    <key id="fromCountry">expédié de</key>
+    <key id="column-toCountry">pays de livraison</key>
+    <key id="column-dspidCode">code DSPID</key>
+    <key id="column-status">état</key>
+    <key id="column-startpublication">début de validité</key>
+    <key id="column-endpublication">fin de validité</key>
+    <key id="column-actions">actions</key>
+    <key id="date">afficher les codes DSPID valables à la date</key>
+    <key id="confirm-delete-dspid">confirmez-vous la suppression de ce code DSPID ?</key>
+    <key id="go-to-help">accéder à la page d'aide Kiala</key>
+</i18n>

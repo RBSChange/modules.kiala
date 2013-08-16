@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.kiala.bo.exceptions" lcid="fr_FR">
+
+    <key id="no-selected-doc">vous devez sélectionner une commande pour l'exporter à destination de KIALA</key>
+    <key id="no-doc-for-export">il n'y a pas de commande correspondant à l'id {orderId}</key>
+    <key id="not-kiala-shipped">cette commande n'est pas à livrer par KIALA</key>
+    <key id="no-export-with-temporary-bill-number">impossible d'exporter une commande ayant un numéro de facture temporaire</key>
+    <key id="no-dspid-for-country">vous n'avez pas renseigné de code DSPID pour faire une expédition de {fromCountry} vers {toCountry}</key>
+	<key id="no-export-bill-unpaid">impossible d'exporter cette commande car elle n'est pas encore payée</key>
+	<key id="export-error-title">erreur lors de l'exportation</key>
+	<key id="export-error-intro">l'erreur suivante a eu lieu lors de l'export :</key>
+	<key id="no-expedition-for-export">vous n'avez créé aucune expédition, il n'est donc pas possible de faire un export vers Kiala.</key>
+	<key id="import-no-file">vous devez fournir un fichier</key>
+	<key id="import-bad-file-type">mauvais type de fichier ; merci de fournir un fichier CSV</key>
+	<key id="no-expedition-for-import">import impossible : il n'y a pas d'expédition dans cette commande</key>
+	<key id="import-success">import réalisé avec succès</key>
+</i18n>

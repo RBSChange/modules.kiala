@@ -1,0 +1,7 @@
+gridlist.kialadspids{
+    -moz-binding: url(binding:modules.kiala.cDspidEditor#cKialadspidsList);
+}
+
+wdialog[template="ImportKialaCSV"]{
+	-moz-binding: url(binding:modules.kiala.importDialogs#importCSVDialog);
+}

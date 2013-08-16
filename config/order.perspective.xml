@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<perspective>
+	<!--
+		<models>
+			<updatemodel name="modules_order/order">
+				<addcontextaction name="exportKialaCSV" />
+
+				<contextactions>
+					<groupactions name="createRootfolder_">
+						<contextaction name="createTopshelf" />
+						<contextaction name="createProductqueryfolder" />
+					</groupactions>
+				</contextactions>
+			</updatemodel>
+		</models>
+		<toolbar>
+			<toolbarbutton name="exportKialaCSV" />
+		</toolbar>
+		<actions>
+			<action name="exportKialaCSV" single="true" icon="kialaExport"
+					label="&amp;m.kiala.bo.actions.export-kiala-csv;"/>
+
+	</actions>
+	-->
+</perspective>

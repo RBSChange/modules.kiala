@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+	<binding fileName="modules/list/persistentdocument/import/list_binding.xml" />
+	
+	<systemfolder module="list" relatedmodule="kiala">
+		<dynamiclist byListid="modules_kiala/operatedcountries" label="m.kiala.list.operatedcountries-label"
+			description="m.kiala.list.operatedcountries-description" />
+        <staticlist byListid="modules_kiala/packnshiptype" label="m.kiala.list.packnshiptype-label"
+                     description="m.kiala.list.packnshiptype-description">
+            <staticitem label="m.kiala.list.packnshiptype-item-webservice" value="webservice" />
+            <staticitem label="m.kiala.list.packnshiptype-item-desktop" value="desktop" />
+        </staticlist>
+	</systemfolder>
+</script>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.kiala.list" lcid="fr_FR">
+    <key id="operatedcountries-label">liste des pays pour Kiala</key>
+    <key id="operatedcountries-description">Liste des pays où Kiala est présent et opère</key>
+    <key id="packnshiptype-label">type de compte</key>
+    <key id="packnshiptype-description">Permet d'indiquer si le compte doit utiliser les webservices ou l'application desktop / web</key>
+    <key id="packnshiptype-item-webservice">Webservices</key>
+    <key id="packnshiptype-item-desktop">Desktop / Web</key>
+</i18n>

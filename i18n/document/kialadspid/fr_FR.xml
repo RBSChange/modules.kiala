@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<i18n baseKey="m.kiala.document.kialadspid" lcid="fr_FR">
+  <include id="m.generic.document.document"/>
+  <key id="document-name">DSPID</key>
+  <key id="label">intitulé</key>
+  <key id="tocountry">réception en</key>
+  <key id="dspidcode">code DSPID</key>
+  <key id="kialamodeId">id du mode de livraison rattaché</key>
+</i18n>
