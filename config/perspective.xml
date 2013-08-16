@@ -1,3 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <perspective>
+  <models>
+    <model name="modules_generic/rootfolder">
+      <children>
+
+            <child model="modules_kiala/dspid"/></children>
+      <drops>
+            </drops>
+      <contextactions>
+           <contextaction name="createDspid"/></contextactions>
+    </model>
+    <model name="modules_generic/folder">
+      <contextactions>
+
+            <contextaction name="createDspid"/></contextactions>
+      <children>
+
+            <child model="modules_kiala/dspid"/></children>
+      <drops>
+
+            </drops>
+    </model>
+    <model name="modules_kiala/kialadspid">
+      <contextactions>
+        <contextaction name="edit"/>
+        <contextaction name="delete"/>
+        <contextaction name="activate"/>
+        <contextaction name="deactivated"/>
+        <contextaction name="reactivate"/>
+      </contextactions>
+    </model>
+  </models>
+  <actions>
+    <action name="createDspid" single="true" permission="Insert_dspid" icon="add"/>
+  </actions>
 </perspective>

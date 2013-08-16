@@ -3,5 +3,8 @@
   <properties>
     <add name="dspid" type="String" db-size="10" default-value="DEMO_DSP" min-occurs="1"/>
     <add name="groupName" type="String" min-occurs="1"/>
+    <add name="fromCountry" type="modules_zone/country" from-list="modules_kiala/operatedcountries" max-occurs="1" min-occurs="1"/>
+    <add name="packnshiptype" type="String" default-value="desktop" from-list="modules_kiala/packnshiptype"/>
+    <add name="isWeightRequired" type="Boolean"/>
   </properties>
 </document>

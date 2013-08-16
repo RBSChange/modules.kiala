@@ -15,7 +15,7 @@ class kiala_BlockExpeditionDetailAction extends shipping_BlockExpeditionDetailAc
 		
 		$this->param['relayCode'] = $shippingAdress->getLabel();
 		$this->param['countryCode'] = $shippingAdress->getCountryCode();
-		$this->param['dspId'] = $shippingMode->getDspid();
+		$this->param['dspId'] = $shippingMode->getDspidToCountry($shippingAdress->getCountry())->getDspidCode();
 		$this->param['groupName'] = $shippingMode->getGroupName();
 		$this->param['lang'] = strtoupper($this->getContext()->getLang());
 		

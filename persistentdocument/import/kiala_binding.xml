@@ -2,4 +2,6 @@
 <script>
   <binding fileName="modules/generic/persistentdocument/import/generic_binding.xml"/>
   <binding name="kialamode" className="kiala_KialamodeScriptDocumentElement"/>
+  <binding name="dspid" className="kiala_DspidScriptDocumentElement"/>
+  <binding name="kialadspid" className="kiala_KialadspidScriptDocumentElement"/>
 </script>

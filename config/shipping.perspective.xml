@@ -11,17 +11,28 @@
 			<adddrop model="modules_kiala/kialamode" action="move" />
 			<addcontextaction name="createKialaMode" group="create_" before="" />
 		</updatemodel>
-		<model name="modules_kiala/kialamode">
-			<contextactions>
-				<contextaction name="edit"/>
-				<contextaction name="delete"/>
-				<contextaction name="deactivated"/>
-				<contextaction name="reactivate"/>
-			</contextactions>
-		</model>
+        <model name="modules_kiala/kialamode">
+            <addchild model="modules_kiala/kialadspid" />
+            <contextactions>
+                <contextaction name="edit"/>
+                <contextaction name="delete"/>
+                <contextaction name="deactivated"/>
+                <contextaction name="reactivate"/>
+            </contextactions>
+        </model>
+        <model name="modules_kiala/kialadspid">
+            <contextactions>
+                <contextaction name="edit"/>
+                <contextaction name="delete"/>
+                <contextaction name="deactivated"/>
+                <contextaction name="reactivate"/>
+            </contextactions>
+        </model>
 	</models>
 	<actions>
-		<action name="createKialaMode" single="true" permission="Insert_kialamode" icon="add" 
-			label="&amp;modules.kiala.bo.actions.Createkialamode;"/>
+        <action name="createKialaMode" single="true" permission="Insert_kialamode" icon="add"
+                label="&amp;modules.kiala.bo.actions.Createkialamode;"/>
+        <action name="createDspidFromKialaMode" single="true" permission="Insert_kialamode" icon="add"
+                label="&amp;modules.kiala.bo.actions.Createkialamode;"/>
 	</actions>
 </perspective>

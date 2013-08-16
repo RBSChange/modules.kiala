@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <i18n baseKey="m.kiala.bo.actions" lcid="fr_FR">
   <key id="createkialamode">créer un mode de livraison Kiala</key>
+  <key id="createdspid">créer</key>
+	<key id="export-kiala-csv">export KIALA</key>
+	<key id="import-kiala-csv">import KIALA</key>
 </i18n>

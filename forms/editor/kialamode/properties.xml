@@ -3,11 +3,51 @@
 	<section labeli18n="modules.uixul.bo.doceditor.fieldsgroup.Title">
 		<field name="label" />
 		<field name="code" />
-		<field name="dspid" />
+		<!--
+        <field name="dspid" />
+        -->
+        <field name="fromCountry" type="dropdownlist" listid="modules_kiala/operatedcountries"/>
+        <field name="packnshiptype" type="dropdownlist"
+               listid="modules_kiala/packnshiptype"
+               default-value="desktop" disabled="true"/>
 		<field name="groupName" />
+		<field name="isWeightRequired" />
 		<field name="description" />
 		<field name="visual" hidehelp="true" allowfile="true" mediafoldername="Inbox" />
 		<field name="addressRequired" />
 		<field name="deliveryZone" moduleselector ="zone" allow="[modules_zone_zone]"/>
 	</section>
+    <xul>
+        <javascript>
+            <constructor><![CDATA[
+                var me = this;
+                this.addEventListener('panelInitializeComplete', function () {me.showHelp();},true);
+
+				// Print order button.
+				var button = this.addActionButton("${transui:m.kiala.bo.doceditor.panel.kialadspid.go-to-help,ucf,js}", "{IconsBase}/small/kiala.png");
+				button.addEventListener('command', function () { me.openKialaHelp(); }, true);
+			]]></constructor>
+
+            <method name="showHelp">
+                <body><![CDATA[
+                   var result = wCore.executeJSON('kiala', 'IsFirstMode', null, null, true);
+				    if (result.status == 'OK')
+                    {
+                        if (result.contents.isFirstMode)
+                        {
+                            this.openKialaHelp();
+                        }
+                    }
+				]]></body>
+            </method>
+
+            <method name="openKialaHelp">
+                <body><![CDATA[
+                    //wCore.debug('########## openKialaHelp');
+					var url = wCore.buildServerUrl('kiala', 'OpenKialaHelp');
+					window.open(url, 'kialaHelp');
+				]]></body>
+            </method>
+        </javascript>
+    </xul>
 </panel>

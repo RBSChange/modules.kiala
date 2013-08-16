@@ -264,4 +264,158 @@ class kiala_KialamodeService extends shipping_RelayModeService
 		}
 		return $result;
 	}
+
+    /**
+     * @param bool $onlyPublished
+     * @return Integer
+     */
+    public function getKialaModeCount($onlyPublished=false)
+    {
+        $query = $this->createQuery();
+        if ($onlyPublished)
+        {
+            $query->add(Restrictions::published());
+        }
+        $query->add(Restrictions::ne('publicationstatus', 'FILED'));
+        $query->setProjection(Projections::rowCount());
+        $result = $query->find();
+        return $result[0]['rowcount'];
+    }
+
+    /**
+     * @param kiala_persistentdocument_kialamode $document
+     * @return bool
+     */
+    public function isPublishable($document)
+    {
+        $kdsi = kiala_KialadspidService::getInstance();
+        if ($kdsi->getDspidCountWithModeId($document->getId()) > 0)
+        {
+            return parent::isPublishable($document);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param shipping_persistentdocument_mode $mode
+     * @param integer $countryId
+     * @return boolean
+     */
+    public function isValidForCountryId($mode, $countryId)
+    {
+        $kdsi = kiala_KialadspidService::getInstance();
+        if ($kdsi->getDspidWithModeIdAndCountry($mode->getId(),
+                    zone_persistentdocument_country::getInstanceById($countryId)))
+        {
+            return parent::isValidForCountryId($mode, $countryId);
+        }
+        return false;
+    }
+
+	/**
+	 * @param catalog_persistentdocument_product|catalog_persistentdocument_declinedproduct $product
+	 * @return bool
+	 */
+	public function canShipProductWithMode($product, $mode)
+	{
+		if (method_exists($product, 'getShippingWeight'))
+		{
+			if (($mode->getIsWeightRequired() && $product->getShippingWeight() !== null)
+				|| !$mode->getIsWeightRequired())
+			{
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Returns the name of the CSV fields in the expected order
+	 * @return array
+	 */
+	public function getCsvDefinition()
+	{
+		$fields = array();
+		// <!-- DSP identification -->
+		// "partnerId" = code DSPID/>
+		$fields[] = 'partnerId';
+		//   <!-- Parcel information -->
+		// "partnerBarcode" type="string"/>
+		$fields[] = 'partnerBarcode';
+		// "parcelNumber" type="string"/>
+		$fields[] = 'parcelNumber';
+		// "orderNumber" type="string"/>
+		$fields[] = 'orderNumber';
+		// "orderDate" type="datetime" datepattern="yyyyMMdd"/>
+		$fields[] = 'orderDate';
+
+		// "invoiceNumber" type="string"/>
+		$fields[] = 'invoiceNumber';
+		// "invoiceDate" type="datetime" datepattern="yyyyMMdd"/>
+		$fields[] = 'invoiceDate';
+		// "shipmentNumber" type="string"/>
+		$fields[] = 'shipmentNumber';
+		// "CODAmount" type="float" numericpattern="#.##"/> CODAMount = Cash On Delivery Amount
+		$fields[] = 'CODAmount';
+		// "commercialValue" type="float" numericpattern="#.##"/>
+		$fields[] = 'commercialValue';
+		// "parcelWeight" type="float" numericpattern="#.###"/>
+		$fields[] = 'parcelWeight';
+		// "parcelVolume" type="float" numericpattern="#.###"/>
+		$fields[] = 'parcelVolume';
+		// "parcelDescription" type="string"/>
+		$fields[] = 'parcelDescription';
+
+		//  <!-- Information on the recipient of the parcel (destination address etc.) -->
+		// "customerId" type="string"/>
+		$fields[] = 'customerId';
+		// "customerName" type="string"/>
+		$fields[] = 'customerName';
+		// "customerFirstName" type="string"/>
+		$fields[] = 'customerFirstName';
+		// "customerTitle" type="string"/>
+		$fields[] = 'customerTitle';
+		// "customerStreet" type="string"/>
+		$fields[] = 'customerStreet';
+		// "customerStreetNumber" type="string"/>
+		$fields[] = 'customerStreetNumber';
+		// "customerExtraAddressLine" type="string"/>
+		$fields[] = 'customerExtraAddressLine';
+
+		// "customerZip" type="string"/>
+		$fields[] = 'customerZip';
+		// "customerCity" type="string"/>
+		$fields[] = 'customerCity';
+		// "customerLocality" type="string"/>
+		$fields[] = 'customerLocality';
+		// "customerLanguage" type="string"/>
+		$fields[] = 'customerLanguage';
+		// "customerPhone1" type="string"/>
+		$fields[] = 'customerPhone1';
+		//$customer->getDefaultAddress()->getPhone();
+		// "customerPhone2" type="string"/>
+		$fields[] = 'customerPhone2';
+		// "customerPhone3" type="string"/>
+		$fields[] = 'customerPhone3';
+		// "customerEmail1" type="string"/>
+		$fields[] = 'customerEmail1';
+		// "customerEmail2" type="string"/>
+		$fields[] = 'customerEmail2';
+		// "customerEmail3" type="string"/>
+		$fields[] = 'customerEmail3';
+
+		//  <!-- Parcel handling information for Kiala -->
+		// "positiveNotificationRequested" type="string"/>
+		$fields[] = 'positiveNotificationRequested';
+		// "kialaPoint" type="string"/>
+		$fields[] = 'kialaPoint';
+		// "backupKialaPoint" type="string"/>
+		$fields[] = 'backupKialaPoint';
+		$fields[] = 'backupKialaPoint';
+		$fields[] = 'endingColumn';
+
+		return $fields;
+	}
 }

@@ -16,6 +16,8 @@
 		<entry name="mapWidth">500</entry> <!-- Can be a numeric value -->
 		<entry name="mapHeight">400</entry> <!-- Can be a numeric value -->
 		<entry name="alignMap">right</entry> <!-- Can be left -->
-		<entry name="disableHeader">false</entry> <!-- Can be true -->
+        <entry name="disableHeader">false</entry> <!-- Can be true -->
+        <entry name="operatedCountries">be,fr,lu,nl,es,gb</entry> <!-- List of country codes where Kiala operate -->
+        <entry name="kialaHelpPage">http://e-commerce.kiala.com</entry> <!-- URL for help page provide by Kiala -->
 	</project>
 </config>

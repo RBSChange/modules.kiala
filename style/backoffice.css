@@ -1,3 +1,9 @@
 treechildren::-moz-tree-image(modules_kiala_kialamode){
 	list-style-image: url(/changeicons/small/shipping.png);
 }
+treechildren::-moz-tree-image(modules_kiala_dspid){
+	list-style-image: url(/changeicons/small/document.png);
+}
+treechildren::-moz-tree-image(modules_kiala_kialadspid){
+	list-style-image: url(/changeicons/small/document.png);
+}

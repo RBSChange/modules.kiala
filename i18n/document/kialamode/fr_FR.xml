@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <i18n baseKey="m.kiala.document.kialamode" lcid="fr_FR">
   <include id="m.shipping.document.mode"/>
-  <key id="dspid">numéro de compte Kiala</key>
-  <key id="groupname">nom du groupe</key>
+    <key id="document-name">livraison Kiala</key>
+    <key id="dspid">numéro de compte Kiala</key>
+    <key id="fromCountry">pays d'expédition</key>
+    <key id="packnshiptype">souscription Pack'n'Ship</key>
+	<key id="groupname">nom du groupe</key>
+	<key id="isweightrequired">poids obligatoire</key>
+	<key id="isweightrequired-help">Si "Oui", le mode de livraison sera disponible uniquement lorsque tous les produits du panier possèdent un poids, sinon le mode de livraison sera toujours disponible. Dans les deux cas la disponibilité du mode restera également soumise aux filtres définis au niveau de la boutique.</key>
 </i18n>

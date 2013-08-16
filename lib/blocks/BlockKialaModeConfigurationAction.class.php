@@ -28,9 +28,10 @@ class kiala_BlockKialaModeConfigurationAction extends shipping_BlockRelayModeCon
 		$mode = $this->param['mode'];
 		
 		$relays = array();
-		
-		$url = $webserviceUrl . '?dspid=' . $mode->getDspid() . '&countryid=' . $this->param['countryCode'] . '&zip=' . $this->param['zipcode'] . '&language=' . $this->param['lang'];
-		
+		$country = zone_CountryService::getInstance()->getByCode($this->param['countryCode']);
+		$dspid = $mode->getDspidToCountry($country);
+		$url = $webserviceUrl . '?dspid=' . $dspid->getDspidCode(). '&countryid=' . $this->param['countryCode'] . '&zip=' . $this->param['zipcode'] . '&language=' . $this->param['lang'];
+
 		$httpClient = HTTPClientService::getInstance()->getNewHTTPClient();
 		$xml = $httpClient->get($url);
 		

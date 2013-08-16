@@ -6,4 +6,15 @@
 			this.createDocumentEditor('modules_kiala_kialamode', listWidget.getSelectedItems()[0].id);
 		]]></body>
 	</action>
+    <action name="createDspidFromKialaMode">
+        <parameter name="params" />
+        <body><![CDATA[
+			var kialaModeId = params[3];
+			var toCountry = params[4];
+
+			var editor = this.getDocumentEditor('modules_kiala_kialadspid');
+			editor.setAttribute('toCountry', toCountry);
+			this.createDocumentEditor('modules_kiala_kialadspid', kialaModeId);
+		]]></body>
+    </action>
 </actions>

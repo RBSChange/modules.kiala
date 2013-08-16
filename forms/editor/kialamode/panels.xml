@@ -2,6 +2,7 @@
 <panels hidden="true">
   <panel name="resume"/>
   <panel name="properties"/>
+  <panel name="dspid" icon="box-share" labeli18n="m.kiala.bo.doceditor.tab.dspids" />
   <panel name="localization"/>
   <panel name="publication"/>
   <panel name="history"/>
