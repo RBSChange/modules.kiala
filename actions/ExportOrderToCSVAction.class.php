@@ -117,15 +117,6 @@ class kiala_ExportOrderToCSVAction extends f_action_BaseAction
 				continue;
 			}
 
-			if ($parcelNumber = $expedition->getPacketNumber())
-			{
-				$parcels[$parcelNumber] = array('number'=>$parcelNumber, 'weight'=>0);
-			}
-			else
-			{
-				$parcels['allInOne'] = array('number'=>self::DEFAULT_KIALA_PACKET_NUMBER, 'weight'=>0);
-			}
-
 			$lines = $expedition->getLineArray();
 			foreach ($lines as $line)
 			{
@@ -134,7 +125,7 @@ class kiala_ExportOrderToCSVAction extends f_action_BaseAction
 				$lineTrackingNumber = $line->getTrackingNumber();
 				if (!$lineParcelNumber)
 				{
-					$lineParcelNumber = "allInOne";
+					$lineParcelNumber = self::DEFAULT_KIALA_PACKET_NUMBER;
 					try
 					{
 						$tm->beginTransaction();
@@ -192,7 +183,7 @@ class kiala_ExportOrderToCSVAction extends f_action_BaseAction
         //   <!-- Parcel information -->
         // "partnerBarcode" type="string"/>
         //$datas['partnerBarcode'] = "";
-            // "parcelNumber" type="string"/>
+        // "parcelNumber" type="string"/>
         //$datas['parcelNumber'] = "";
         // "orderNumber" type="string"/>
         $datas['orderNumber'] = $order->getOrderNumber();
@@ -273,7 +264,12 @@ class kiala_ExportOrderToCSVAction extends f_action_BaseAction
         // "positiveNotificationRequested" type="string"/>
         $datas['positiveNotificationRequested'] = "Y";
         // "kialaPoint" type="string"/>
-        $datas['kialaPoint'] = $order->getShippingAddress()->getLabel();
+		$kialaPoint = $order->getShippingAddress()->getLabel();
+		for ($i=strlen($kialaPoint);$i<5;$i++)
+		{
+			$kialaPoint = '0'.$kialaPoint;
+		}
+        $datas['kialaPoint'] = $kialaPoint;
         // "backupKialaPoint" type="string"/>
 		//$datas['backupKialaPoint'] = "";
 		//$datas['backupKialaPoint'] = "";
@@ -288,7 +284,11 @@ class kiala_ExportOrderToCSVAction extends f_action_BaseAction
 			// "parcelNumber" type="string"/>
 			$line['parcelNumber'] = $parcel['number'];
 			// "shipmentNumber" type="string"/>
-			$line['shipmentNumber'] = $parcel['trackingNumber'];
+			$line['shipmentNumber'] = '';
+			if (array_key_exists('trackingNumber', $parcel))
+			{
+				$line['shipmentNumber'] = $parcel['trackingNumber'];
+			}
 			// "parcelWeight" type="float" numericpattern="#.###"/>
 			$line['parcelWeight'] = number_format($parcel['weight']/1000, 3, '.', '');
 

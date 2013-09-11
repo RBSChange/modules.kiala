@@ -14,4 +14,5 @@
 	<key id="import-bad-file-type">mauvais type de fichier ; merci de fournir un fichier CSV</key>
 	<key id="no-expedition-for-import">import impossible : il n'y a pas d'expédition dans cette commande</key>
 	<key id="import-success">import réalisé avec succès</key>
+	<key id="bad-order">le fichier que vous tentez d'importer contient une (ou plusieurs) ligne(s) en rapport avec la commande n°{orderNumber}.</key>
 </i18n>

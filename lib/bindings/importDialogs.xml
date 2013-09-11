@@ -75,38 +75,42 @@
 					document.getAnonymousElementByAttribute(this, 'anonid', 'form-panel').setAttribute('hidden', 'true');
 					document.getAnonymousElementByAttribute(this, 'anonid', 'importing-panel').setAttribute('hidden', 'true');
 					document.getAnonymousElementByAttribute(this, 'anonid', 'message-panel').removeAttribute('hidden');
-					
+
+					var messageIcon = document.getAnonymousElementByAttribute(this, 'anonid', 'messageIcon');
+
 					if (result.status == 'OK')
 					{
+						messageIcon.src="{HttpHost}/media/changeicons/normal/positive.png";
 						if (result.contents.message)
 						{
 							this.appendMessage(result.contents.message);
 						}
 						else
 						{
-							this.appendMessage("${transui:m.productupdater.bo.dialogs.import.Success,ucf,js}");
+							this.appendMessage("${transui:m.kiala.bo.exceptions.import-success,ucf}");
 						}
 					}
 					else
 					{
+						messageIcon.src="{HttpHost}/media/changeicons/normal/negative.png";
 						wCore.warn('onUploadComplete: ' + wCore.dump(result));
 						this.appendMessage(result.contents.errorMessage);
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="appendMessage">
 				<parameter name="msg" />
 				<body><![CDATA[
-					var messageBox = document.getAnonymousElementByAttribute(this, 'anonid', 'messageBox');
-					var txts = msg.split("\n");
-					for (var i = 0; i < txts.length; i++)
-					{
-						var node = messageBox.appendChild(document.createElement('description'));
-						node.setAttribute('style', 'max-width: 370px');
-						node.textContent = txts[i];
-					}
-				]]></body>
+						var messageBox = document.getAnonymousElementByAttribute(this, 'anonid', 'messageBox');
+						var txts = msg.split("\n");
+						for (var i = 0; i < txts.length; i++)
+						{
+							var node = messageBox.appendChild(document.createElement('description'));
+							node.setAttribute('style', 'max-width: 370px');
+							node.textContent = txts[i];
+						}
+					]]></body>
 			</method>
 		</implementation>
 		<xbl:content>
@@ -141,8 +145,19 @@
 						</xul:hbox>
 					</xul:vbox>
 					<xul:vbox anonid="message-panel" flex="1">
-						<xul:vbox anonid="messageBox" style="min-height: 90px"/>
+						<xul:hbox style="height: 20px" />
 						<xul:hbox>
+							<xul:vbox style="width: 60px">
+								<xul:hbox pack="center">
+									<xul:image anonid="messageIcon" style="width:32px;height:32px;" />
+								</xul:hbox>
+							</xul:vbox>
+							<xul:vbox>
+								<xul:vbox anonid="messageBox" style="min-height: 90px"/>
+
+							</xul:vbox>
+						</xul:hbox>
+						<xul:hbox pack="center">
 							<xul:button image="{IconsBase}/small/delete.png" oncommand="onCancel()" label="${transui:m.uixul.bo.dialog.Close,ucf,attr}" />
 						</xul:hbox>
 					</xul:vbox>

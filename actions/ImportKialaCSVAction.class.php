@@ -17,12 +17,11 @@ class kiala_ImportKialaCSVAction extends f_action_BaseJSONAction
 		{
 			return $this->sendJSONError($lsi->transBO('m.kiala.bo.exceptions.import-no-file'));
 		}
-		$extension = 'csv';
-		
-		if ($_FILES['filename']['error'] != UPLOAD_ERR_OK || substr($_FILES['filename']['name'], - strlen($extension)) != $extension)
-		{
-			return $this->sendJSONError($lsi->transBO('m.kiala.bo.exceptions.import-bad-file-type'));
 
+		$extension = f_util_StringUtils::toLower(substr($_FILES['filename']['name'], - 3));
+		if ($_FILES['filename']['error'] != UPLOAD_ERR_OK || ($extension != 'csv' && $extension != 'txt'))
+		{
+			return $this->sendJSONError($lsi->transBO('m.kiala.bo.exceptions.import-bad-file-type', array('ucf')));
 		}
 		$tempPath = $_FILES['filename']['tmp_name'];
 		
@@ -35,9 +34,16 @@ class kiala_ImportKialaCSVAction extends f_action_BaseJSONAction
 			}
 			fclose($h);
 		}
-		$this->importKialaCsvForOrder($lines, $order);
 
-		return $this->sendJSON(array('message' => $lsi->transBO('m.kiala.bo.exceptions.import-success')));
+		try {
+			$this->importKialaCsvForOrder($lines, $order);
+		}
+		catch (Exception $e)
+		{
+			return $this->sendJSONError($e->getMessage());
+		}
+
+		return $this->sendJSON(array('message' => $lsi->transBO('m.kiala.bo.exceptions.import-success', array('ucf'))));
 	}
 
 	protected function getFieldsFromDatas($datas)
@@ -59,9 +65,24 @@ class kiala_ImportKialaCSVAction extends f_action_BaseJSONAction
 		return $fields;
 	}
 
+	/**
+	 * Set tracking number on expeditions for $order or throw an exception if problem
+	 * @param String[] $csvLines
+	 * @param order_persistentdocument_order $order
+	 * @throws Exception
+	 */
 	protected function importKialaCsvForOrder($csvLines, $order)
 	{
 		$lsi = LocaleService::getInstance();
+
+		// Quick integrity check
+		foreach ($csvLines as $line)
+		{
+			if ($order->getOrderNumber() != $line['orderNumber'])
+			{
+				throw new Exception($lsi->transBO('m.kiala.bo.exceptions.bad-order', array('ucf'), array('orderNumber'=>$line['orderNumber'])));
+			}
+		}
 
 		$query = kiala_KialamodeService::getInstance()->createQuery();
 		$query->setProjection(Projections::property("id"));
