@@ -188,7 +188,7 @@ class kiala_ExportOrderToCSVAction extends f_action_BaseAction
         // "orderNumber" type="string"/>
         $datas['orderNumber'] = $order->getOrderNumber();
         // "orderDate" type="datetime" datepattern="yyyyMMdd"/>
-        $datas['orderDate'] = $order->getUICreationdate();
+        $datas['orderDate'] = date_DateFormat::format($order->getUICreationdate(), "Ymd");
 
         $bill = $this->getFirstBillForOrder($order);
         $bill->getUICreationdate();
@@ -217,11 +217,11 @@ class kiala_ExportOrderToCSVAction extends f_action_BaseAction
         // "parcelVolume" type="float" numericpattern="#.###"/>
         //$datas['parcelVolume'] = "";
         // "parcelDescription" type="string"/>
-        //$datas['parcelDescription'] = "";
+        $datas['parcelDescription'] = Framework::getConfigurationValue('modules/kiala/parcelDescriptionForCSVExport');
 
         //  <!-- Information on the recipient of the parcel (destination address etc.) -->
         // "customerId" type="string"/>
-        $datas['customerId'] = ($customer->getCodeReference()) ? $customer->getCodeReference() : $customer->getEmail();
+        $datas['customerId'] = $customer->getEmail();
         // "customerName" type="string"/>
         $datas['customerName'] = $customer->getLastname();
         // "customerFirstName" type="string"/>

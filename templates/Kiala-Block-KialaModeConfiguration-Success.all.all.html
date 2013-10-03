@@ -1,0 +1,83 @@
+<tal:block change:include="module 'order'; template 'Order-Inc-StdProcess-NavigationTop'; type 'html'; cart cart" />
+
+<tal:block change:include="" transmitAll="true" module="order" template="Order-Inc-ShippingModeConfiguration-Header" />
+
+<h2 change:h="">${trans: m.shipping.general.select-relay-header-title, ucf}</h2>
+<tal:block change:block="" module="website" name="messages" container="" />
+
+<tal:block tal:condition="not:frameUrl">
+	<script change:javascript="head 'modules.shipping.lib.js.relay-shipping'"></script>
+	<script change:javascript="markers relays"></script>
+
+	<div id="small-relay-list-container" class="columns normal-margin" data-static="true" >
+		<tal:block change:include="" transmitAll="true" module="kiala" template="Kiala-Inc-RelayList-Small" />
+	</div><br/>
+	<div class="cleaner"></div>
+	<div class="columns normal-margin js">
+		<div class="column-66">
+			<div id="relays-map" class="relay-map normal" style="width: ${mapWidth}; height: ${mapHeight}" 
+				data-latitude="${mapCenter/latitude}" data-longitude="${mapCenter/longitude}" data-zoom="${mapzoom}"></div>
+		</div>
+		<div class="column-33">
+			<p class="normal"><button class="button" onclick="relay_CenterToHome()">${trans:m.shipping.general.center-on-me,ucf}</button></p>
+			<form change:form="" id="select-new-relay-form" action="${action}">
+				<div id="relay-over-infos" ></div>
+				<input type="hidden" name="relayRef" id="select-new-relay-form-relayRef" />
+				<input type="hidden" name="relayCountryCode" id="select-new-relay-form-relayCountryCode" />
+				<input type="hidden" name="relayName" id="select-new-relay-form-relayName" />
+				<input type="hidden" name="relayAddressLine1" id="select-new-relay-form-relayAddressLine1" />
+				<input type="hidden" name="relayAddressLine2" id="select-new-relay-form-relayAddressLine2" />
+				<input type="hidden" name="relayAddressLine3" id="select-new-relay-form-relayAddressLine3" />
+				<input type="hidden" name="relayZipCode" id="select-new-relay-form-relayZipCode" />
+				<input type="hidden" name="relayCity" id="select-new-relay-form-relayCity" />
+				<input type="hidden" name="modeId" value="${modeId}" />
+				<input type="hidden" name="${hiddenFieldName}" value="true" />
+				<input change:submit="" name="choose" value="${trans:m.shipping.general.choose-this-relay,attr,ucf}" id="select-new-relay-form-submit" style="display: none;"/>
+			</form>
+		</div>
+	</div>
+	<form change:form="" class="normal cmxform distance-filter">
+		<fieldset>
+			<legend class="h-2">${trans:m.shipping.general.filter-by-distance,ucf}</legend>
+			<ul change:errors=""></ul>
+			<ul change:messages=""></ul>
+			<ol>
+				<li>
+					<input change:textinput="name address" labeli18n="m.shipping.general.address" id="relay-address" size="20"/>
+					<input class="button locate-me hidden-without-geolocation" type="button" value="${trans:m.shipping.general.geolocate-me,ucf}" />
+					<img change:img="front/solrsearch/indicator.gif" style="visibility: hidden" class="locate-me-indicator" />
+				</li>
+				<li>
+					<input change:textinput="name zipcode; required true" labeli18n="m.shipping.general.zipcode" id="relay-zipcode" size="5"/>
+				</li>
+				<li>
+					<input change:textinput="name city; required true" labeli18n="m.shipping.general.city" id="relay-city" size="10"/>
+				</li>
+				<li>
+					<input change:selectinput="name country; listId modules_zone/publishedcountries" labeli18n="m.shipping.general.country" id="relay-country" size="10"/>
+					<input change:hiddeninput="name countrycode" id="relay-country-code"/>
+				</li>
+			</ol>
+
+			<p class="buttons">
+				<input change:hiddeninput="name mapzoom" id="relay-map-zoom" value="${mapzoom}"/>
+				<input type="hidden" name="modeId" value="${modeId}" />
+				<input type="hidden" name="${hiddenFieldName}" value="true" />
+				<input change:submit="" name="filter" value="${trans:m.shipping.general.choose-this-relay,ucf}" id="relay-filter" value="${trans:m.shipping.general.filter,attr,ucf}"/>
+			</p>
+		</fieldset>
+	</form>
+	<div id="relay-list-container" class="normal-margin" data-static="true" >
+		<tal:block change:include="" transmitAll="true" module="kiala" template="Kiala-Inc-RelayList-Success" />
+	</div>
+</tal:block>
+
+<tal:block tal:condition="frameUrl">
+	<div class="text-align-center normal-margin">
+		<iframe src="${frameUrl}" allowtransparency="true" framespacing="0" style="overflow: auto; border: none; width: 100%; height: 500px;"></iframe>
+	</div>
+</tal:block>
+
+<p class="buttons">
+	<a change:actionlink="" href="${cart/getOrderProcess/getShippingStepUrl}">${trans:m.order.frontoffice.back-to-previous-step,ucf}</a>
+</p>

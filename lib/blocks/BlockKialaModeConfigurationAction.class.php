@@ -25,12 +25,18 @@ class kiala_BlockKialaModeConfigurationAction extends shipping_BlockRelayModeCon
 	protected function buildRelayList()
 	{
 		$webserviceUrl = Framework::getConfigurationValue('modules/kiala/webserviceUrl');
-		$mode = $this->param['mode'];
+		$kpOnMap = Framework::getConfigurationValue('modules/kiala/maxKialaPointsOnMap');
+		$mode = $this->param[self::P_MODE];
 		
 		$relays = array();
 		$country = zone_CountryService::getInstance()->getByCode($this->param['countryCode']);
 		$dspid = $mode->getDspidToCountry($country);
-		$url = $webserviceUrl . '?dspid=' . $dspid->getDspidCode(). '&countryid=' . $this->param['countryCode'] . '&zip=' . $this->param['zipcode'] . '&language=' . $this->param['lang'];
+		$url = $webserviceUrl . '?dspid=' . $dspid->getDspidCode(). '&countryid=' . $this->param[self::P_COUNTRY_CODE] . '&zip=' . $this->param[self::P_ZIP_CODE] . '&max-result='.$kpOnMap;
+
+		if (isset($this->param[self::P_LANG]))
+		{
+			$url .= '&language=' . $this->param[self::P_LANG];
+		}
 
 		$httpClient = HTTPClientService::getInstance()->getNewHTTPClient();
 		$xml = $httpClient->get($url);
@@ -56,5 +62,10 @@ class kiala_BlockKialaModeConfigurationAction extends shipping_BlockRelayModeCon
 		}
 		
 		return $relays;
+	}
+
+	protected function getDefaultMapZoom()
+	{
+		return Framework::getConfigurationValue('modules/kiala/defaultMapZoom');
 	}
 }

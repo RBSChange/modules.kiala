@@ -1,0 +1,24 @@
+<tal:block tal:condition="relays" tal:repeat="relay relays" style="margin-bottom:15px">
+	<tal:block tal:condition="php: repeat.relay.number < 3" class="${alternateclass:relayCount}">
+		<div id="small-${relay/getRef}" class="column-50">
+			<h2 change:h="">
+				${relay/getName}
+			</h2>
+			<img tal:condition="relay/getPictureUrl"  src="${relay/getPictureUrl}" style="max-width: 150px; max-height: 1750px; float:left; margin-right:10px;"/>
+			<div style="display:table-cell">
+				${relay/getAddressAsHtml}
+				<tal:block tal:condition="relay/getDistance">
+				${trans:m.shipping.general.distance,ucf, distance=relay/getDistance}
+				</tal:block>
+				<tal:block tal:condition="relay/getLocationHint">
+				<p>${trans:m.shipping.general.location-hint-title,ucf}</p>
+				<p>${relay/getLocationHint}</p>
+				</tal:block>
+			</div>
+			<p class="buttons">
+				<button class="button" onclick="relay_SelectRelayByRef('${relay/getRef}', '${relay/getCountryCode}', '${relay/getNameAsJs}', '${relay/getAddressLine1AsJs}', '${relay/getAddressLine2AsJs}', '${relay/getAddressLine3AsJs}', '${relay/getZipCode}', '${relay/getCityAsJs}')">${trans:m.kiala.general.choose-this-relay,ucf}</button>
+			</p>
+		</div>
+	</tal:block>
+</tal:block>
+<p tal:condition="not:relays">${trans:m.shipping.general.no-relay-to-display,ucf}</p>

@@ -413,7 +413,6 @@ class kiala_KialamodeService extends shipping_RelayModeService
 		$fields[] = 'kialaPoint';
 		// "backupKialaPoint" type="string"/>
 		$fields[] = 'backupKialaPoint';
-		$fields[] = 'backupKialaPoint';
 
 		return $fields;
 	}

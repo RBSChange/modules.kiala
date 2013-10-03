@@ -8,6 +8,9 @@
 	<project>
 		<entry name="webserviceUrl">https://locateandselect.kiala.com/kplist</entry>
 		<entry name="trackingUrl">https://trackandtrace-ws.kiala.com/tracker/rest/ParcelData</entry>
+		<entry name="maxKialaPointsOnMap">10</entry>
+		<entry name="defaultMapZoom">13</entry>
+		<entry name="parcelDescriptionForCSVExport">RBS_1.0</entry>
 		<!-- Use this parameters to configure the iFrame -->
 		<entry name="useFrame">false</entry> <!-- Can be true -->
 		<entry name="frameBaseUrl">http://locateandselect.kiala.com/search</entry>

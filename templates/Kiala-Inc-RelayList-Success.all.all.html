@@ -1,0 +1,55 @@
+<ul tal:condition="relays">
+	<li tal:repeat="relay relays" class="${alternateclass:relayCount} hidden">
+		<div id="${relay/getRef}">
+			<h2 change:h="">
+				${relay/getName}
+			</h2>
+
+			<div class="columns">
+				<div class="column-50" tal:omit-tag="not:relay/getPictureUrl">
+					<div class="column-50 address" tal:omit-tag="relay/getPictureUrl">
+						<div class="normal-margin address" tal:omit-tag="not: relay/getPictureUrl">
+							<h3 change:h="">${trans:m.shipping.general.address-title,ucf}</h3>
+							${relay/getAddressAsHtml}
+							<tal:block tal:condition="relay/getDistance">
+								${trans:m.shipping.general.distance,ucf, distance=relay/getDistance}
+							</tal:block>
+							<tal:block tal:condition="relay/getLocationHint">
+								<p>${trans:m.shipping.general.location-hint-title,ucf}</p>
+								<p>${relay/getLocationHint}</p>
+							</tal:block>
+						</div>
+					</div>
+		
+					<div class="column-50" tal:omit-tag="relay/getPictureUrl">
+						<h3 change:h="">${trans:m.shipping.general.opening-hours-title,ucf}</h3>
+						<dl class="inline-items" tal:define="openingHours relay/getOpeningHours">
+							<dt>${trans:f.date.date.monday,ucf}</dt>
+							<dd>${openingHours/0}</dd>
+							<dt>${trans:f.date.date.tuesday,ucf}</dt>
+							<dd>${openingHours/1}</dd>
+							<dt>${trans:f.date.date.wednesday,ucf}</dt>
+							<dd>${openingHours/2}</dd>
+							<dt>${trans:f.date.date.thursday,ucf}</dt>
+							<dd>${openingHours/3}</dd>
+							<dt>${trans:f.date.date.friday,ucf}</dt>
+							<dd>${openingHours/4}</dd>
+							<dt>${trans:f.date.date.saturday,ucf}</dt>
+							<dd>${openingHours/5}</dd>
+							<dt>${trans:f.date.date.sunday,ucf}</dt>
+							<dd>${openingHours/6}</dd>
+						</dl>
+					</div>
+				</div>
+				<div class="column-50" tal:condition="relay/getPictureUrl">
+					<img src="${relay/getPictureUrl}" />
+				</div>
+			</div>
+			<p class="buttons">
+				<button class="button" onclick="relay_SelectRelayByRef('${relay/getRef}', '${relay/getCountryCode}', '${relay/getNameAsJs}', '${relay/getAddressLine1AsJs}', '${relay/getAddressLine2AsJs}', '${relay/getAddressLine3AsJs}', '${relay/getZipCode}', '${relay/getCityAsJs}')">${trans:m.kiala.general.choose-this-relay,ucf}</button>
+			</p>
+		</div>
+		<div class="cleaner"></div>
+	</li>
+</ul>
+<p tal:condition="not:relays">${trans:m.kiala.general.no-relay-to-display,ucf}</p>
